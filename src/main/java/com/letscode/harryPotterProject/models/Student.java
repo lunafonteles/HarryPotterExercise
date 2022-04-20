@@ -1,15 +1,29 @@
 package com.letscode.harryPotterProject.models;
 
+import com.letscode.harryPotterProject.request.StudentRequest;
 import lombok.Data;
-import java.util.UUID;
+import lombok.NoArgsConstructor;
+import javax.persistence.*;
 
+@Entity
 @Data
+@NoArgsConstructor
 public class Student {
-    private UUID id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(name = "name")
     private String name;
+    @Column(name = "year")
     private Integer year;
+    @Column(name = "houseKey")
     private String houseKey;
 
-    public Student(UUID id, String name, Integer year) {
+    public Student(StudentRequest studentRequest) {
+        this.name = studentRequest.getName();
+        this.year = studentRequest.getYear();
+    }
+
+    public Student(String name, Integer year) {
     }
 }
