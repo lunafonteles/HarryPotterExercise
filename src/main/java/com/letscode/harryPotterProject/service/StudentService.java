@@ -6,35 +6,35 @@ import com.letscode.harryPotterProject.models.Student;
 import com.letscode.harryPotterProject.persistence.StudentRepository;
 import com.letscode.harryPotterProject.request.StudentRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class StudentService {
 
+    @Autowired
     private final StudentRepository studentRepository;
+    @Autowired
     private final GetHouseClient getHouseClient;
-    private final HouseKeyInfo houseKeyInfo;
 
     public Student create(StudentRequest studentRequest) {
         Student student = new Student();
             student.setName(studentRequest.getName());
             student.setYear(studentRequest.getYear());
-            student.setHouseKey(houseKeyInfo.getKey());
 
-/*        if(student.getHouseKey().equals(0)) {
-            student.setHouseKey(houseKeyInfo.getKey());
+            HouseKeyInfo key = getHouseClient.execute();
+            student.setHouseKey(key.getKey());
 
             studentRepository.save(student);
             return student;
         }
-        return null;*/
-        studentRepository.save(student);
-        return student;
-    }
 
-    public List<Student> getAll() {
-        return studentRepository.findAll();
+    public Optional<Student> findById(Integer id) {
+        Optional<Student> student = studentRepository.findById(id);
+        HouseKeyInfo houseName = getHouseClient.retrieve(student.get().getHouseKey());
+        student.get().setHouseName(houseName.getName());
+        return student;
     }
 }

@@ -7,8 +7,8 @@ import com.letscode.harryPotterProject.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
-import java.util.stream.Collectors;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/students")
@@ -24,10 +24,10 @@ public class StudentController {
         return new StudentResponse(student);
     }
 
-    @GetMapping
-    public List<StudentResponse> getStudents() {
-        List<Student> students =studentService.getAll();
-        return students.stream().map(StudentResponse::new).collect(Collectors.toList());
+    @GetMapping("/{id}")
+    public StudentResponse getStudent(@PathVariable Integer id) {
+        Optional<Student> student =studentService.findById(id);
+        return new StudentResponse(student.get());
     }
 }
 

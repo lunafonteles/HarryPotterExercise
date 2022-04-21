@@ -11,13 +11,15 @@ import javax.persistence.*;
 public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     @Column(name = "name")
     private String name;
     @Column(name = "year")
     private Integer year;
     @Column(name = "houseKey")
     private String houseKey;
+    @Column(name = "houseName")
+    private String houseName;
 
     public Student(StudentRequest studentRequest) {
         this.name = studentRequest.getName();
